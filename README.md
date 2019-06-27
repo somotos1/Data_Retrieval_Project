@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Surfs Up!
 
 Congratulations! You've decided to treat yourself to a long holiday vacation in Honolulu, Hawaii! To help with your trip planning, you need to do some climate analysis on the area. The following outlines what you need to do.
@@ -122,3 +123,6 @@ Now that you have completed your initial analysis, design a Flask API based on t
 ## Copyright
 
 Data Boot Camp ©2019. All Rights Reserved.
+=======
+
+>>>>>>> ff220168621f2a62944ee6cbcdc06594b60b82a6
