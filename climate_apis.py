@@ -107,17 +107,30 @@ def start_date(start):
 @app.route("/api/v1.0/start-end/<start>/<end>")
 def range_start_end(start, end):
     # When given the start and the end date, calculate the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive
+    max_date_str = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
+    format_str = "%m-%d-%Y"
+    max_date = dt.datetime.strptime(max_date_str, format_str)
+    max_date = max_date.date()
+    min_date = session.query(Measurement.date).order_by(Measurement.date).first()
+    min_date = dt.datetime.strptime(min_date_str, format_str)
+    min_date = min_date.date()
 
-    sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
-    results = session.query(*sel).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+    if start in pd.date_range(min_date,max_date) and end in pd.date_range(min_date,max_date):
+        sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+        results = session.query(*sel).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
-    start_end_dict = {}
-    start_end_dict["Min"] = results[0][0]
-    start_end_dict["Avg"] = results[0][1]
-    start_end_dict["Max"] = results[0][2]
+        start_end_dict = {}
+        start_end_dict["Min"] = results[0][0]
+        start_end_dict["Avg"] = results[0][1]
+        start_end_dict["Max"] = results[0][2]
+        return jsonify(start_end_dict)  
+
+    else:
+        return redirect(url_for('welcome'))
+
+
 
     
-    return jsonify(start_end_dict)  
 
 if __name__ == '__main__':
     app.run(debug=True)
